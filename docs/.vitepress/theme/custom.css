@@ -1,0 +1,11 @@
+:root {
+  --vp-nav-height-desktop: 60px;
+}
+
+img {
+  border-radius: 4px;
+}
+
+.vp-doc [class*='language-'] code {
+  padding: 0;
+}

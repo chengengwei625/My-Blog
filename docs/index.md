@@ -1,29 +1,29 @@
 ---
+title: 简介
 layout: home
 
 hero:
-  name: My Blog
+  name: Chen GW
   text: 个人博客.
   tagline: Lorem ipsum...
   image:
-    src: /logo.png
+    src: /logo.jpg
     alt: VitePress
   actions:
     - theme: brand
       text: Get Started
-      link: /guide/what-is-vitepress
+      link: /html/
     - theme: alt
       text: View on GitHub
-      link: https://gitee.com/chengengweinb
-
+      link: https://github.com/chengengwei625
 features:
   - icon: ⚡️
     title: 前端
-    details: JavaScript, TypeScript, Vue
+    details: HTML, CSS, JavaScript, TypeScript, Vue
   - icon: 🖖
-    title: Power of Vue meets Markdown
+    title: 构建工具
     details: Lorem ipsum...
   - icon: 🛠️
-    title: Simple and minimal, always
+    title: 插件
     details: Lorem ipsum...
 ---
