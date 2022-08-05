@@ -12,18 +12,18 @@
 | 更新全部依赖   | npm update                          | yarn upgrade                | pnpm update/up              |
 | 更新某个依赖   | npm update [package]                | yarn upgrade [package]      | pnpm update/up [package]    |
 
-# 创建 vite+vue3+pinin+ts 项目
+# 创建vite+vue3+pinin+ts项目
 
 ## 项目初始化
 
-> pnpm create vite
+> pnpm create  vite
 > cd vite-vue3-ts-pinia
 > pnpm i
 > pnpm run dev
 
 ## 设置路径别名
 
-> pnpm i @types/node --save-dev// 使用 path 包设置路径别名 @ 时需要此包
+> pnpm i @types/node --save-dev// 使用path包设置路径别名 @ 时需要此包
 
 修改`vite.config.ts`
 
@@ -115,23 +115,26 @@ export default defineConfig({
 
 ```js
 module.exports = {
-  parser: 'vue-eslint-parser',
+    parser: 'vue-eslint-parser',
 
-  parserOptions: {
-    parser: '@typescript-eslint/parser',
-    ecmaVersion: 2020,
-    sourceType: 'module',
-    ecmaFeatures: {
-      jsx: true
+    parserOptions: {
+        parser: '@typescript-eslint/parser',
+        ecmaVersion: 2020,
+        sourceType: 'module',
+        ecmaFeatures: {
+            jsx: true
+        }
+    },
+
+    extends: [
+        'plugin:vue/vue3-recommended',
+        'plugin:@typescript-eslint/recommended',
+    ],
+
+    rules: {
+        // override/add rules settings here, such as:
     }
-  },
-
-  extends: ['plugin:vue/vue3-recommended', 'plugin:@typescript-eslint/recommended'],
-
-  rules: {
-    // override/add rules settings here, such as:
-  }
-}
+};
 ```
 
 创建忽略文件：.eslintignore
@@ -156,7 +159,7 @@ index.html
 }
 ```
 
-## 集成 prettier
+## 集成prettier
 
 > pnpm i prettier eslint-config-prettier eslint-plugin-prettier -D
 
@@ -164,41 +167,41 @@ index.html
 
 ```js
 module.exports = {
-  // 一行最多 80 字符
-  printWidth: 80,
-  // 使用 4 个空格缩进
-  tabWidth: 2,
-  // 不使用 tab 缩进，而使用空格
-  useTabs: true,
-  // 行尾需要有分号
-  semi: false,
-  // 使用单引号代替双引号
-  singleQuote: true,
-  // 对象的 key 仅在必要时用引号
-  quoteProps: 'as-needed',
-  // jsx 不使用单引号，而使用双引号
-  jsxSingleQuote: false,
-  // 末尾使用逗号
-  trailingComma: 'all',
-  // 大括号内的首尾需要空格 { foo: bar }
-  bracketSpacing: true,
-  // jsx 标签的反尖括号需要换行
-  jsxBracketSameLine: false,
-  // 箭头函数，只有一个参数的时候，也需要括号
-  arrowParens: 'always',
-  // 每个文件格式化的范围是文件的全部内容
-  rangeStart: 0,
-  rangeEnd: Infinity,
-  // 不需要写文件开头的 @prettier
-  requirePragma: false,
-  // 不需要自动在文件开头插入 @prettier
-  insertPragma: false,
-  // 使用默认的折行标准
-  proseWrap: 'preserve',
-  // 根据显示样式决定 html 要不要折行
-  htmlWhitespaceSensitivity: 'css',
-  // 换行符使用 lf
-  endOfLine: 'lf'
+    // 一行最多 80 字符
+    printWidth: 80,
+    // 使用 4 个空格缩进
+    tabWidth: 2,
+    // 不使用 tab 缩进，而使用空格
+    useTabs: true,
+    // 行尾需要有分号
+    semi: false,
+    // 使用单引号代替双引号
+    singleQuote: true,
+    // 对象的 key 仅在必要时用引号
+    quoteProps: 'as-needed',
+    // jsx 不使用单引号，而使用双引号
+    jsxSingleQuote: false,
+    // 末尾使用逗号
+    trailingComma: 'all',
+    // 大括号内的首尾需要空格 { foo: bar }
+    bracketSpacing: true,
+    // jsx 标签的反尖括号需要换行
+    jsxBracketSameLine: false,
+    // 箭头函数，只有一个参数的时候，也需要括号
+    arrowParens: 'always',
+    // 每个文件格式化的范围是文件的全部内容
+    rangeStart: 0,
+    rangeEnd: Infinity,
+    // 不需要写文件开头的 @prettier
+    requirePragma: false,
+    // 不需要自动在文件开头插入 @prettier
+    insertPragma: false,
+    // 使用默认的折行标准
+    proseWrap: 'preserve',
+    // 根据显示样式决定 html 要不要折行
+    htmlWhitespaceSensitivity: 'css',
+    // 换行符使用 lf
+    endOfLine: 'lf'
 }
 ```
 
@@ -244,66 +247,65 @@ VueUse 是一个基于 Composition API 的实用函数集合。
 
 ```vue
 <template>
-  <h1>测试 vueUse 的鼠标坐标</h1>
-  <h3>Mouse: {{ x }} x {{ y }}</h3>
-</template>
+   <h1> 测试 vueUse 的鼠标坐标 </h1>
+   <h3>Mouse: {{x}} x {{y}}</h3>
+ </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import { useMouse } from '@vueuse/core'
+ <script lang="ts">
+     import { defineComponent } from 'vue';
+     import { useMouse } from '@vueuse/core'
 
-export default defineComponent({
-  name: 'VueUse',
-  setup() {
-    const { x, y } = useMouse()
+     export default defineComponent({
+         name: 'VueUse',
+         setup() {
+           const { x, y } = useMouse()
 
-    return {
-      x,
-      y
-    }
-  }
-})
-</script>
+           return {
+             x, y
+           }
+         }
+     });
+ </script>
 ```
 
-## 安装 axios
+## 安装axios
 
 axios 是一个基于 promise 的 HTTP 库，可以用在浏览器和 node.js 中。
 
-注意：不是所有的插件都带有类型声明文件，只有类型声明文件才能保证支持 ts，没有类型声明文件的插件需要安装类型声明文件。
+注意：不是所有的插件都带有类型声明文件，只有类型声明文件才能保证支持ts，没有类型声明文件的插件需要安装类型声明文件。
 
 > pnpm i axios @types/axios
 
 新建 src/utils/axios.ts
 
 ```typescript
-import axios, { AxiosResponse, AxiosRequestConfig } from 'axios'
+ import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
 
-const service = axios.create()
+ const service = axios.create();
 
-// Request interceptors
-service.interceptors.request.use(
-  (config: AxiosRequestConfig) => {
-    // do something
-    return config
-  },
-  (error: any) => {
-    Promise.reject(error)
-  }
-)
+ // Request interceptors
+ service.interceptors.request.use(
+     (config: AxiosRequestConfig) => {
+         // do something
+         return config;
+     },
+     (error: any) => {
+         Promise.reject(error);
+     }
+ );
 
-// Response interceptors
-service.interceptors.response.use(
-  async (response: AxiosResponse) => {
-    // do something
-  },
-  (error: any) => {
-    // do something
-    return Promise.reject(error)
-  }
-)
+ // Response interceptors
+ service.interceptors.response.use(
+     async (response: AxiosResponse) => {
+         // do something
+     },
+     (error: any) => {
+         // do something
+         return Promise.reject(error);
+     }
+ );
 
-export default service
+ export default service;
 ```
 
 在页面中使用即可
@@ -325,62 +327,62 @@ export default service
 新建 src/api/index.ts
 
 ```typescript
-import * as login from './module/login'
-import * as index from './module/index'
+import * as login from './module/login';
+import * as index from './module/index';
 
-export default Object.assign({}, logins, index)
+export default Object.assign({}, logins, index);
 ```
 
 新建 src/api/module/login.ts 和 src/api/module/index.ts
 
 ```typescript
-import request from '@/utils/axios'
+import request from '@/utils/axios';
 
 /**
  * 登录
  */
-
+ 
 interface IResponseType<P = {}> {
-  code?: number
-  status: number
-  msg: string
-  data: P
+    code?: number;
+    status: number;
+    msg: string;
+    data: P;
 }
 interface ILogin {
-  token: string
-  expires: number
+    token: string;
+    expires: number;
 }
 export const login = (username: string, password: string) => {
-  return request<IResponseType<ILogin>>({
-    url: '/api/auth/login',
-    method: 'post',
-    data: {
-      username,
-      password
-    }
-  })
-}
+    return request<IResponseType<ILogin>>({
+        url: '/api/auth/login',
+        method: 'post',
+        data: {
+            username,
+            password
+        }
+    });
+};
 ```
 
 由于使用了 typescript，所以需新增 src/types/shims-axios.d.ts
 
 ```typescript
-import { AxiosRequestConfig } from 'axios'
+import { AxiosRequestConfig } from 'axios';
 /**
  * 自定义扩展axios模块
  * @author Maybe
  */
 declare module 'axios' {
-  export interface AxiosInstance {
-    <T = any>(config: AxiosRequestConfig): Promise<T>
-    request<T = any>(config: AxiosRequestConfig): Promise<T>
-    get<T = any>(url: string, config?: AxiosRequestConfig): Promise<T>
-    delete<T = any>(url: string, config?: AxiosRequestConfig): Promise<T>
-    head<T = any>(url: string, config?: AxiosRequestConfig): Promise<T>
-    post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T>
-    put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T>
-    patch<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T>
-  }
+    export interface AxiosInstance {
+        <T = any>(config: AxiosRequestConfig): Promise<T>;
+        request<T = any>(config: AxiosRequestConfig): Promise<T>;
+        get<T = any>(url: string, config?: AxiosRequestConfig): Promise<T>;
+        delete<T = any>(url: string, config?: AxiosRequestConfig): Promise<T>;
+        head<T = any>(url: string, config?: AxiosRequestConfig): Promise<T>;
+        post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T>;
+        put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T>;
+        patch<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T>;
+    }
 }
 ```
 
@@ -389,7 +391,7 @@ declare module 'axios' {
 ```typescript
 <script lang="ts">
     import API from '@/api';
-
+    
     const requestRes = async () => {
         let result = await API.login('zhangsan', '123456');
     }
@@ -400,15 +402,15 @@ declare module 'axios' {
 
 https://blog.csdn.net/Royzilong/article/details/123736090
 
-## 安装路由 router
+## 安装路由router
 
 > pnpm i -S vue-router
 
-在 src 目录下新建 router 文件夹，然后在 router 目录下新建 index.ts 文件，在 index.ts 文件下配置路由
+在src目录下新建router文件夹，然后在router目录下新建index.ts文件，在index.ts文件下配置路由
 
 ```ts
-import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/Home.vue'
+import { createRouter,createWebHistory } from "vue-router";
+import Home from "../views/Home.vue"
 // import Layout from '@/views/layout/index.vue'
 // import Home from '@/views/home/index.vue'
 
@@ -451,13 +453,13 @@ const router = createRouter({
 export default router
 ```
 
-然后在 main.ts 中引入
+然后在main.ts中引入
 
 ```diff
 import { createApp } from 'vue'
 import App from './App.vue'
 +import router from './router/index'
-
+ 
 const app =createApp(App)
 +app.use(router)
 app.mount('#app')
@@ -473,11 +475,13 @@ const { currentRoute } = useRouter()
 const query = currentRoute.value.query.redirect
 ```
 
-## 安装 element-plus
 
-> pnpm i -S element-plus
 
-在 main.ts 中引入使用
+## 安装element-plus
+
+> pnpm i -S  element-plus
+
+在main.ts中引入使用
 
 ```diff
 import { createApp } from 'vue'
@@ -485,21 +489,21 @@ import App from './App.vue'
 import router from './router/index'
 +import ElementPlus from 'element-plus'
 +import 'element-plus/dist/index.css'
-
+ 
 const app =createApp(App)
 +app.use(router).use(ElementPlus)
 app.mount('#app')
 ```
 
-## 安装 sass 和 sass-loader
+## 安装sass 和sass-loader
 
 > pnpm i -D sass sass-loader
 
-## 安装 unplugin-auto-import
+## 安装unplugin-auto-import
 
 > pnpm i -D unplugin-auto-import
 
-在 vite.config.ts 中配置
+在vite.config.ts中配置
 
 ```diff
 import { defineConfig } from "vite";
@@ -507,7 +511,7 @@ import vue from "@vitejs/plugin-vue";
 import vueJsx from '@vitejs/plugin-vue-jsx';
 // 引入自动导入插件
 +import AutoImport from 'unplugin-auto-import/vite'
-
+ 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -527,9 +531,9 @@ export default defineConfig({
 });
 ```
 
-## 安装 less
+## 安装less
 
-> pnpm add -D less
+>  pnpm add -D less
 
 ```less
  <style lang="less">
@@ -537,11 +541,13 @@ export default defineConfig({
  </style>
 ```
 
-## 安装 pinia
+
+
+## 安装pinia
 
 > pnpm i pinia
 
-main.ts 中引用
+main.ts中引用
 
 ```diff
 import { createApp } from "vue";
@@ -550,20 +556,20 @@ import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
 import App from "./App.vue";
 import router from "./router";
-
+ 
 import "./assets/main.css";
-
+ 
 const app = createApp(App);
-
+ 
 +app.use(createPinia());
 app.use(router);
-
+ 
 app.use(ElementPlus);
-
+ 
 app.mount("#app");
 ```
 
-项目 src 下创建文件 stores/counter.ts
+项目src下创建文件stores/counter.ts
 
 ```typescript
 import { defineStore } from 'pinia'
@@ -575,7 +581,7 @@ export const useCounterStore = defineStore({
     counter: 0
   }),
   getters: {
-    doubleCount: state => state.counter * 2
+    doubleCount: (state) => state.counter * 2
   },
   actions: {
     increment() {
@@ -592,58 +598,64 @@ export const useCounterStore = defineStore({
   <h1 @click="cahnge">{{ useCounter.counter }}</h1>
 </template>
 <script lang="ts" setup>
-import { useCounterStore } from '../stores/counter'
+import { useCounterStore } from "../stores/counter"
 const useCounter = useCounterStore()
 const cahnge = () => {
   useCounter.increment()
 }
 useCounter.$subscribe((args, state) => {
-  console.log('store', args, state)
+  console.log("store", args, state)
 })
 </script>
 ```
 
-修改 State：
+修改State：
 
 ```vue
-// 1. 直接修改 state （不建议） userStore.name = '李四' // 2. 通过 actions 去修改
-<script lang="ts" setup>
-import { useUserStore } from '@/store/user'
+ // 1. 直接修改 state （不建议）
+ userStore.name = '李四'
 
-const userStore = useUserStore()
-userStore.updateName('李四')
-</script>
+ // 2. 通过 actions 去修改
+ <script lang="ts" setup>
+ import { useUserStore } from '@/store/user'
+
+ const userStore = useUserStore()
+ userStore.updateName('李四')
+ </script>
+
 ```
 
-## 手写 pinia 持久化插件
 
-在 main.ts 中定义一个方法在 pinia 中注册
+
+## 手写pinia持久化插件
+
+在main.ts中定义一个方法在pinia中注册
 
 ```diff
 import { createApp } from "vue";
 import App from "./App.vue";
 // 引用pinia
 import { createPinia, PiniaPluginContext } from "pinia";
-
-//定义一个方法
+ 
+//定义一个方法 
 +const piniaPlugin = (options: Options) => {
 +  return (context: PiniaPluginContext) => {
 +  };
 +};
-
+ 
 //在pinia中注册一下
 +const store = createPinia();
-
+ 
 +store.use(
 +  piniaPlugin({
 +    key: "pinia-test",
 +  })
 +);
-
+ 
 const Vue = createApp(App);
-
+ 
 +Vue.use(store);
-
+ 
 Vue.mount("#app");
 ```
 
@@ -652,37 +664,37 @@ Vue.mount("#app");
 在`piniaPlugin`方法中我们可使用`store.$subscribe`监听`state`的变化然后做存储
 
 ```typescript
-import { PiniaPluginContext } from 'pinia'
-
+import { PiniaPluginContext } from "pinia";
+ 
 const setStorage = (key: string, value: any) => {
-  localStorage.setItem(key, JSON.stringify(value))
-}
-
+  localStorage.setItem(key, JSON.stringify(value));
+};
+ 
 const getStorage = (key: string) => {
-  return localStorage.getItem(key) ? JSON.parse(localStorage.getItem(key) as string) : {}
-}
-
+  return localStorage.getItem(key) ? JSON.parse(localStorage.getItem(key) as string) : {};
+};
+ 
 type Options = {
-  key?: string
-}
-const __piniaKey__: string = 'mystoragekey'
-
+  key?: string;
+};
+const __piniaKey__: string = "mystoragekey";
+ 
 export const piniaPlugin = (options: Options) => {
   return (context: PiniaPluginContext) => {
-    console.log('main-pinia', context)
-    const { store } = context
-    const data = getStorage(`${options?.key ?? __piniaKey__}-${store.$id}`)
-
+    console.log("main-pinia", context);
+    const { store } = context;
+    const data = getStorage(`${options?.key ?? __piniaKey__}-${store.$id}`);
+ 
     store.$subscribe(() => {
-      console.log('store---change')
-      setStorage(`${options?.key ?? __piniaKey__}-${store.$id}`, toRaw(store.$state))
-    })
-    console.log('H00000000000', store)
+      console.log("store---change");
+      setStorage(`${options?.key ?? __piniaKey__}-${store.$id}`, toRaw(store.$state));
+    });
+    console.log("H00000000000", store);
     return {
-      ...data
-    }
-  }
-}
+      ...data,
+    };
+  };
+};
 ```
 
 在`mian.ts`中引用
@@ -691,35 +703,35 @@ export const piniaPlugin = (options: Options) => {
 import { createApp } from "vue";
 import App from "./App.vue";
 import "./assets/css/reset.css";
-
+ 
 // 引用pinia
 import { createPinia, PiniaPluginContext } from "pinia";
 +import { piniaPlugin } from "./Store/piniaPlugin"
-
+ 
 +const store = createPinia();
-
+ 
 +store.use(
 +  piniaPlugin({
 +    key: "pinia-test",
 +  })
 +);
-
+ 
 const Vue = createApp(App);
-
+ 
 +Vue.use(store);
-
+ 
 Vue.mount("#app");
 ```
 
-## 安装 vite-plugin-vue-setup-extend
+## 安装vite-plugin-vue-setup-extend
 
 在使用 Vue3.2 的 setup 语法糖后，无法优雅的定义组件的 name 值，虽然 vite 会根据组件的文件名自动生成组件名，但是需要自定义的组件名时，就很不方便。
 
 解决方法
 
-方案 1：写两个 script 标签
+方案1：写两个 script 标签
 
-最简单的方法就是写两个 script 标签，一个用 setup 语法，一个不用 setup 语法，代码如下：
+最简单的方法就是写两个script 标签，一个用 setup 语法，一个不用 setup 语法，代码如下：
 
 ```typescript
 <script>
@@ -733,7 +745,7 @@ Vue.mount("#app");
 </script>
 ```
 
-方案 2：使用 vite 插件 vite-plugin-vue-setup-extend
+方案2：使用 vite 插件 vite-plugin-vue-setup-extend
 
 > pnpm i vite-plugin-vue-setup-extend -D
 
@@ -743,21 +755,23 @@ Vue.mount("#app");
 import { defineConfig } from 'vite'
 import VueSetupExtend from 'vite-plugin-vue-setup-extend'
 export default defineConfig({
-  plugins: [VueSetupExtend()]
+  plugins: [ VueSetupExtend() ]
 })
 ```
 
 使用:
 
 ```typescript
-<script lang="ts" setup name="demo"></script>
+<script lang="ts" setup name="demo">
+
+</script>
 ```
 
 问题：
 
 在使用 vite-plugin-vue-setup-extend 0.4.0 及以前版本时，会有个问题：如果 script 标签内没有内容，即使给 script 标签添加上 name 属性，其在 vue-devtools 内也不会生效。
 
-解决办法: 不要让 script 标签内空着，例如：加行注释。
+解决办法: 不要让script标签内空着，例如：加行注释。
 
 ```vue
 <script lang="ts" setup name="demo">
@@ -765,9 +779,9 @@ export default defineConfig({
 </script>
 ```
 
-## 安装全局事件发布订阅 mitt
+## 安装全局事件发布订阅mitt
 
-在 vue2 中我们可以创建一个新的 const eventbus = new Vue() 实例去做事件广播，但是在 vue3.x 中不允许我们这样做，我们可以使用插件 mitt 实现
+在vue2 中我们可以创建一个新的 const eventbus = new Vue() 实例去做事件广播，但是在vue3.x中不允许我们这样做，我们可以使用插件mitt实现
 
 > pnpm i mitt -S
 
@@ -793,7 +807,7 @@ Vue.mount('#app')
 
 组件中使用
 
-A.vue 发布事件
+A.vue  发布事件
 
 ```vue
 <template>
@@ -801,18 +815,21 @@ A.vue 发布事件
     <button @click="sendEmit">派发事件</button>
   </div>
 </template>
-
+ 
 <script setup lang="ts">
-import { getCurrentInstance } from 'vue'
-
+import { getCurrentInstance } from 'vue';
+ 
 let instance = getCurrentInstance()
-
+ 
 let sendEmit = () => {
   instance?.proxy?.$Bus.emit('on-paifa', 'mitt 全局广播事件')
+ 
 }
 </script>
-
-<style lang="less" scoped></style>
+ 
+<style lang="less" scoped>
+ 
+</style>
 ```
 
 B.vue 订阅事件
@@ -822,29 +839,33 @@ B.vue 订阅事件
   <div class="b-div">
     <h1>我是BBBBB组件</h1>
     <h5 style="color: #fff;">{{ name }}</h5>
+  
   </div>
 </template>
-
+ 
 <script setup lang="ts">
-import { getCurrentInstance, inject, Ref, ref } from 'vue'
-
+import { getCurrentInstance, inject, Ref, ref } from "vue";
+ 
 let instace = getCurrentInstance()
-instace?.proxy?.$Bus.on('on-a', (res: any) => {
+instace?.proxy?.$Bus.on("on-a", (res: any) => {
   name.value = res
-  console.log('res', res)
+  console.log("res", res)
 })
 </script>
-
-<style scoped></style>
+ 
+<style scoped>
+ 
+</style>
 ```
 
 派发多个事件
 
 ```typescript
-import { getCurrentInstance } from 'vue'
-
+import { getCurrentInstance } from 'vue';
+ 
+ 
 let instance = getCurrentInstance()
-
+ 
 let sendEmit = () => {
   instance?.proxy?.$Bus.emit('on-paifa', 'mitt 全局广播事件')
   instance?.proxy?.$Bus.emit('on-a', 'mitt 全局广播事件AAAA')
@@ -855,13 +876,13 @@ let sendEmit = () => {
 订阅多个事件
 
 ```typescript
-import { getCurrentInstance } from 'vue'
-
+import { getCurrentInstance } from 'vue';
+ 
 let instance = getCurrentInstance()
-
+ 
 //type 事件名称  res传参
-instance?.proxy?.$Bus.on('*', (type: any, res: any): void => {
-  console.log('mitt派发======', type, res)
+ instance?.proxy?.$Bus.on('*', (type: any, res: any): void => {
+  console.log("mitt派发======", type, res)
 })
 ```
 
@@ -869,15 +890,16 @@ instance?.proxy?.$Bus.on('*', (type: any, res: any): void => {
 
 ```typescript
 let fun = (res: any) => {
-  console.log('mitt派发======', res)
+  console.log("mitt派发======", res)
   tname.value = res
+ 
 }
-
+ 
 instace?.proxy?.$Bus.on('on-paifa', fun)
-
+ 
 setTimeout(() => {
   // 卸载监听
-  instace?.proxy?.$Bus.off('on-paifa', fun)
+ instace?.proxy?.$Bus.off('on-paifa', fun)
 }, 2000)
 ```
 
@@ -898,25 +920,22 @@ Vue.config.globalProperties.$Bus = Mit
 
 ```vue
 <script setup lang="ts">
-import { getCurrentInstance, inject, Ref, ref } from 'vue'
-
+import { getCurrentInstance, inject, Ref, ref } from "vue";
+ 
 //第一种
 let instace = getCurrentInstance()
 instace?.proxy?.$Bus.on()
-
+ 
 //第二种
-let {
-  appContext: {
-    config: { globalProperties: $global }
-  }
-} = getCurrentInstance() as any
-
+let { appContext: { config: { globalProperties: $global } } } = getCurrentInstance() as any
+ 
 $global.$Bus.on()
-console.log('aaaa', $global)
-
+console.log("aaaa", $global)
+ 
 //第三种
 let { proxy } = getCurrentInstance() as any
 proxy.$Bus.on()
+ 
 </script>
 ```
 
@@ -924,14 +943,14 @@ proxy.$Bus.on()
 > 项目中使用vue-router@4.x 可以参考之前写的文档
 >
 > 1、
-> router 跳转传参/嵌套路由/路由重定向/别名
+> router跳转传参/嵌套路由/路由重定向/别名
 > https://blog.csdn.net/csl125/article/details/125862159?spm=1001.2014.3001.5501
 >
 > 2、
 > 前置守卫、后置守卫、路由元信息、过渡动效、滚动行为
 > https://blog.csdn.net/csl125/article/details/125958252?spm=1001.2014.3001.5501
 >
-> 3、
+> 3、 
 > 动态路由
 > https://blog.csdn.net/csl125/article/details/125960809?spm=1001.2014.3001.5501
 
@@ -969,7 +988,7 @@ export default defineConfig({
 });
 ```
 
-## 原生 css variable 新特性
+## 原生css variable新特性
 
 原生支持，不需要第三方插件，具体使用文档可 查看
 
@@ -979,14 +998,337 @@ export default defineConfig({
  :root {
    --main-bg-color: pink;
  }
- ​
  body {
    background-color: var(--main-bg-color);
  }
 ```
 
-## 安装 postcss-px-to-viewport
+## 安装postcss-px-to-viewport
 
-> ```ruby
-> pnpm i postcss-px-to-viewport --save-dev
-> ```
+如果你的样式需要做根据视口大小来调整宽度，这个脚本可以将你CSS中的px单位转化为vw，1vw等于1/100视口宽度。
+使用npm安装
+
+> pnpm install postcss-px-to-viewport --save-dev
+>
+> pnpm install postcss-px-to-viewport-8-plugin
+
+或者使用yarn进行安装
+
+> yarn add -D postcss-px-to-viewport
+
+配置参数(默认参数):
+
+```js
+{
+  unitToConvert: 'px',// 需要转换的单位，默认为"px"
+  viewportWidth: 320,// 设计稿的视口宽度
+  unitPrecision: 5,// 单位转换后保留的精度
+  propList: ['*'],// 能转化为vw的属性列表,在特定属性前加 "!"，将不转换该属性的单位 . 例如: ['*', '!letter-spacing']，将不转换letter-spacing
+      //在属性的前或后添加"",可以匹配特定的属性. (例如['position*'] 会匹配 background-position-y)
+  viewportUnit: 'vw',// 希望使用的视口单位
+  fontViewportUnit: 'vw',// 字体使用的视口单位
+  selectorBlackList: [],// 需要忽略的CSS选择器，不会转为视口单位，使用原有的px等单位
+      // 如果传入的值为字符串的话，只要选择器中含有传入值就会被匹配;例如 selectorBlackList 为 ['body'] 的话， 那么 .body-class 就会被忽略
+      // 如果传入的值为正则表达式的话，那么就会依据CSS选择器是否匹配该正则;例如 selectorBlackList 为 [/^body$/] , 那么 body 会被忽略，而 .body 不会
+  minPixelValue: 1,// 设置最小的转换数值，如果为1的话，只有大于1的值会被转换
+  mediaQuery: false,// 媒体查询里的单位是否需要转换单位
+  replace: true,// 是否直接更换属性值，而不添加备用属性
+  exclude: undefined,// 忽略某些文件夹下的文件或特定文件，例如 'node_modules' 下的文件;如果值是一个正则表达式，那么匹配这个正则的文件会被忽略;如果传入的值是一个数组，那么数组里的值必须为正则
+  include: undefined,// 如果设置了include，那将只有匹配到的文件才会被转换，例如只转换 'src/mobile' 下的文件 (include:/\/src\/mobile\//)
+      // 如果值是一个正则表达式，将包含匹配的文件，否则将排除该文件
+// 如果传入的值是一个数组，那么数组里的值必须为正则
+  landscape: false,// 是否添加根据 landscapeWidth 生成的媒体查询条件 @media (orientation: landscape)
+  landscapeUnit: 'vw',// 横屏时使用的单位
+  landscapeWidth: 568// 横屏时使用的视口宽度
+}
+// exclude和include是可以一起设置的，将取两者规则的交集。
+```
+
+在项目根目录下添加`.postcssrc.js`文件
+
+```js
+module.exports = {
+  plugins: {
+    autoprefixer: {}, // 用来给不同的浏览器自动添加相应前缀，如-webkit-，-moz-等等
+    "postcss-px-to-viewport": {
+      unitToConvert: "px", // 要转化的单位
+      viewportWidth: 750, // UI设计稿的宽度
+      unitPrecision: 6, // 转换后的精度，即小数点位数
+      propList: ["*"], // 指定转换的css属性的单位，*代表全部css属性的单位都进行转换
+      viewportUnit: "vw", // 指定需要转换成的视窗单位，默认vw
+      fontViewportUnit: "vw", // 指定字体需要转换成的视窗单位，默认vw
+      selectorBlackList: ["wrap"], // 指定不转换为视窗单位的类名，
+      minPixelValue: 1, // 默认值1，小于或等于1px则不进行转换
+      mediaQuery: true, // 是否在媒体查询的css代码中也进行转换，默认false
+      replace: true, // 是否转换后直接更换属性值
+      exclude: [/node_modules/], // 设置忽略文件，用正则做目录名匹配
+      landscape: false // 是否处理横屏情况
+    }
+  }
+};
+```
+
+- `propList`: 当有些属性的单位我们不希望转换的时候，可以添加在数组后面，并在前面加上!号，如`propList: ["*","!letter-spacing"]`,这表示：所有css属性的属性的单位都进行转化，除了`letter-spacing`的
+- `selectorBlackList`：转换的黑名单，在黑名单里面的我们可以写入字符串，只要类名包含有这个字符串，就不会被匹配。比如`selectorBlackList: ['wrap']`,它表示形如`wrap`,`my-wrap`,`wrapper`这样的类名的单位，都不会被转换
+
+当然，当我们引入一些第三方库的时候，比如`vant`，上面配置的`exclude`去掉，表示全部内容进行vw转换，会遇到这样的问题：
+
+像这个TabBar，变得非常的小，被压扁了。
+
+其实vant官网也是给出了关于viewport的适配方案，在github找一个名为vant-demo的项目，可以看到其配置如下，github链接：
+
+
+很尴尬，vant团队的是根据375px的设计稿去做的，理想视口宽度为375px。
+
+那么，我们是否也要叫UI重新出一版375px的设计稿？
+
+或者，我们在书写的过程心算一下，所有标注的尺寸都除以2？
+
+让我们回到webpack本身，重新看一下这份.postcssrc.js文件，它除了暴露一个对象，也可以暴露一个函数，无论暴露什么，在webpack运行时，都会被我们配置的海量文件读取并执行。
+
+暴露函数有一个好处，可以拿到webpack运行的当前执行文件的信息。
+
+那么我们可以有这样一个思路：如果读取的是vant相关的文件，viewportWidth就设为375，如果是其他的文件，我们就按照我们UI的宽度来设置viewportWidth，即750。
+
+改写.postcssrc.js文件配置如下：
+
+```js
+const path = require('path');
+
+module.exports = ({ webpack }) => {
+  const designWidth = webpack.resourcePath.includes(path.join('node_modules', 'vant')) ? 375 : 750;
+
+  return {
+    plugins: {
+      autoprefixer: {},
+      "postcss-px-to-viewport": {
+        unitToConvert: "px",
+        viewportWidth: designWidth,
+        unitPrecision: 6,
+        propList: ["*"],
+        viewportUnit: "vw",
+        fontViewportUnit: "vw",
+        selectorBlackList: [],
+        minPixelValue: 1,
+        mediaQuery: true,
+        exclude: [],
+        landscape: false
+      }
+    }
+  }
+}
+// 注意：这里使用path.join('node_modules', 'vant')是因为适应不同的操作系统，
+// 在mac下结果为node_modules/vant，而在windows下结果为node_modules\vant
+
+```
+
+在vite中使用:
+
+问题描述：
+安装完 postcss-px-to-viewport 插件后，按照之前vue-cli项目的方式，src目录下新建 postcss.config.js 文件并进行规则配置。运行起来并未报错，但是发现px并没有转换为vw单位。
+
+问题解决：
+因为vite中已经内联了postcss，所以并不需要额外的创建 postcss.config.js文件，vite关于css.postcss 我们只需要在 vite.config.ts中进行配置即可：具体配置如下:
+
+```ts
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import postcsspxtoviewport from 'postcss-px-to-viewport'
+
+export default defineConfig({
+  plugins: [
+    vue()
+  ],
+  css: {
+    postcss: {
+      plugins: [
+        postcsspxtoviewport({
+          unitToConvert: 'px', // 要转化的单位
+          viewportWidth: 750, // UI设计稿的宽度
+          unitPrecision: 6, // 转换后的精度，即小数点位数
+          propList: ['*'], // 指定转换的css属性的单位，*代表全部css属性的单位都进行转换
+          viewportUnit: 'vw', // 指定需要转换成的视窗单位，默认vw
+          fontViewportUnit: 'vw', // 指定字体需要转换成的视窗单位，默认vw
+          selectorBlackList: ['ignore-'], // 指定不转换为视窗单位的类名，
+          minPixelValue: 1, // 默认值1，小于或等于1px则不进行转换
+          mediaQuery: true, // 是否在媒体查询的css代码中也进行转换，默认false
+          replace: true, // 是否转换后直接更换属性值
+          // exclude: [/node_modules/], // 设置忽略文件，用正则做目录名匹配
+          exclude: [],
+          landscape: false // 是否处理横屏情况
+        })
+      ]
+    }
+  }
+})
+```
+
+解决vite中使用postcss-px-to-viewport无法使用vant等多种设计尺寸问题
+
+> pnpm i cnjm-postcss-px-to-viewport
+
+一直希望在**vite** 中 使用 postcss-px-to-viewport 时可以设置不同的设计尺寸，比如**vant**是375设计的
+
+```js
+const path = require("path");
+module.exports = () => {
+  return {
+    plugins: {
+      autoprefixer: {
+        overrideBrowserslist: ["Android 4.1", "iOS 7.1", "Chrome > 31", "ff > 31", "ie >= 8"],
+      },
+      // 修改插件名称
+      "cnjm-postcss-px-to-viewport": {
+        unitToConvert: "px", // 要转化的单位
+        viewportWidth: 750, // UI设计稿的宽度
+        unitPrecision: 6, // 转换后的精度，即小数点位数
+        propList: ["*"], // 指定转换的css属性的单位，*代表全部css属性的单位都进行转换
+        viewportUnit: "vw", // 指定需要转换成的视窗单位，默认vw
+        fontViewportUnit: "vw", // 指定字体需要转换成的视窗单位，默认vw
+        selectorBlackList: ["ignore"], // 指定不转换为视窗单位的类名，
+        minPixelValue: 1, // 默认值1，小于或等于1px则不进行转换
+        mediaQuery: true, // 是否在媒体查询的css代码中也进行转换，默认false
+        replace: true, // 是否转换后直接更换属性值
+        exclude: [], // 设置忽略文件，用正则做目录名匹配
+        landscape: false, // 是否处理横屏情况
+        // 如果没有使用其他的尺寸来设计，下面这个方法可以不需要，比如vant是375的
+        customFun: ({ file }) => {
+          // 这个自定义的方法是针对处理vant组件下的设计稿为375问题
+          const designWidth = path.join(file).includes(path.join("node_modules", "vant")) ? 375 : 750;
+          return designWidth;
+        },
+      },
+    },
+  };
+};
+```
+
+## 安装vite-plugin-svg-icons
+
+一、安装 vite-plugin-svg-icons
+
+```
+npm i vite-plugin-svg-icons -D
+// 或者
+yarn add vite-plugin-svg-icons -D
+```
+
+二、在main.js引入
+
+```js
+import 'virtual:svg-icons-register'
+```
+
+三、配置SVG图片文件夹
+
+![img](https://img-blog.csdnimg.cn/9c6af5cc6ee64c41bc89cf4570a52839.png)
+
+四、在vite.config.js中配置
+
+```diff
+//import path,{ resolve } from 'path'
+import path from 'path'
++import {createSvgIconsPlugin} from 'vite-plugin-svg-icons'
+ 
+export default defineConfig((command) => {
+ return {
+    plugins: [
++      createSvgIconsPlugin({
++        // 指定要缓存的文件夹
++        iconDirs: [path.resolve(process.cwd(), 'src/assets/icons')],
++        // 指定symbolId格式
++        symbolId: '[name]'
++      })
+    ],
+}
+})
+```
+
+五、新建svg封装组件，路径参考：src\components\svg-icon\index.vue
+
+```vue
+<template>
+  <svg :class="svgClass" aria-hidden="true">
+    <use class="svg-use" :href="symbolId" />
+  </svg>
+</template>
+ 
+<script>
+  import { defineComponent, computed } from 'vue'
+ 
+  export default defineComponent({
+    name: 'SvgIcon',
+    props: {
+      prefix: {
+        type: String,
+        default: 'icon'
+      },
+      name: {
+        type: String,
+        required: true
+      },
+      className: {
+        type: String,
+        default: ''
+      }
+    },
+    setup(props) {
+      const symbolId = computed(() => `#${props.name}`)
+      const svgClass = computed(() => {
+        if (props.className) {
+          return `svg-icon ${props.className}`
+        }
+        return 'svg-icon'
+      })
+      return { symbolId, svgClass }
+    }
+  })
+</script>
+<style scope>
+  .svg-icon { 
+    vertical-align: -0.1em; /* 因icon大小被设置为和字体大小一致，而span等标签的下边缘会和字体的基线对齐，故需设置一个往下的偏移比例，来纠正视觉上的未对齐效果 */
+    fill: currentColor; /* 定义元素的颜色，currentColor是一个变量，这个变量的值就表示当前元素的color值，如果当前元素未设置color值，则从父元素继承 */
+    overflow: hidden;
+  } 
+</style>
+```
+
+六、按需引入使用
+
+```vue
+<template>
+  <SvgIcon name="issue"></SvgIcon>
+</template>
+ 
+<script setup>
+import SvgIcon from "@/components/SvgIcon.vue";
+</script>
+```
+
+七、全局引入使用
+
+在main.js中加入
+
+```diff
+//src/main.js
+ 
+import { createApp } from 'vue'
+import App from './App.vue'
+import router from './router'
+ 
+ 
++import svgIcon from './components/svgIcon/index.vue'
++import 'vite-plugin-svg-icons/register'
+ 
+createApp(App)
+    .use(router)
++    .component('svg-icon', svgIcon)
+    .mount('#app')
+```
+
+使用:
+
+```vue
+  <svg-icon name="arrow-down" class="any" />
+```
+
