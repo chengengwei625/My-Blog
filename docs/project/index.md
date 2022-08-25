@@ -12,6 +12,39 @@
 | 更新全部依赖   | npm update                          | yarn upgrade                | pnpm update/up              |
 | 更新某个依赖   | npm update [package]                | yarn upgrade [package]      | pnpm update/up [package]    |
 
+## pnpm
+
+**基本特性**
+
+- 本地安装包速度快： 相比于npm / yarn 快 2-3 倍。
+- 磁盘空间利用高效： 及时版本不同也不会重复安装同一个包。
+- 安全性高：避免了npm/yarn 非法访问依赖和二重身的风险
+
+**pnpm 是如何提升性能的？**
+一句话概括：pnpm 在安装依赖时使用了 hard link 机制，使得用户可以通过不同的路径去寻找某个文件。pnpm 会在全局的 store 目录下存储 node_modules 文件的 hard link。
+
+**下面先简单讲讲几个概念： hard link 、symlink 以及全局的 store 目录。**
+
+**什么是 hard link 和 symlink**
+本质上都是文件访问的方式。
+
+**hard link(硬链接)：**如果 A 是 B 的硬链接，则 A 的 indexNode（可以理解为指针） 与 B 的 indexNode 指向的是同一个。删除其中任何一个都不会影响另外一个的访问。作用是：允许一个文件拥有多个有效路径，这样用户可以避免误删。
+
+**symlink（软链接或符号链接symbolic link）：**类似于桌面快捷方式。比如 A 是 B 的软连接（A 和 B 都是文件名），A 和 B 的 indexNode 不相同，但 A 中只是存放这 B 的路径，访问 A 时，系统会自动找到 B。删掉 A 与 B 没有影响，相反删掉 B，A 依然存在，但它的指向是一个无效链接。
+
+**store 目录:**
+store 目录一般在${os.homedir}/.pnpm-store/v3/files 这个目录下。 由于 pnpm 会在全局的 store 目录下存储 node_modules 文件的 hard link，这样在不同项目中安装同一个依赖的时候，不需要每次都去下载，只需要安装一次就行，避免了二次安装的消耗。这点 npm 、yarn 在不同项目上使用，都需要重新下载安装。
+
+**npm迁移到pnpm:**
+
+首先，删除 `package-lock.json` 文件以及 `node_modules` 目录。 确保通过 `npm i -g pnpm` 安装好 `pnpm` 的前提下，执行 `pnpm install` 安装全部依赖。
+
+运行项目:
+
+> pnpm run dev
+
+
+
 # 创建vite+vue3+pinin+ts项目
 
 ## 项目初始化
@@ -20,6 +53,27 @@
 > cd vite-vue3-ts-pinia
 > pnpm i
 > pnpm run dev
+
+## 配置自动启动浏览器和局域网访问:
+
+`package.json`
+
+```json{5}
+{
+  "name": "consult-patients",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite --open --host",
+    "build": "run-p type-check build-only",
+    "preview": "vite preview --port 4173",
+    "build-only": "vite build",
+    "type-check": "vue-tsc --noEmit",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
+  },
+}
+```
+
+
 
 ## 设置路径别名
 
@@ -1332,3 +1386,867 @@ createApp(App)
   <svg-icon name="arrow-down" class="any" />
 ```
 
+## 移动端调试神器Eruda
+
+你可以通过 npm 来下载使用该工具：
+
+> npm install eruda --save
+
+然后在页面中引入以下脚本：
+
+> (function () {
+>  var src = 'node_modules/eruda/dist/eruda.min.js';
+>  if (!/eruda=true/.test(window.location) && localStorage.getItem('active-eruda') != 'true') return;
+>  document.write('<scr' + 'ipt src="' + src + '"></scr' + 'ipt>');
+> })();
+
+```html
+<!DOCTYPE html>      
+<html lang="en">      
+<head>      
+    <meta charset="UTF-8">      
+    <title>移动端调试神器（eruda）</title>    
+    <style type="text/css">  
+      .test{background: green;}  
+      .one{display: inline-block; width:100px;height: 100px;background: #ddd;}
+      .two{display: inline-block; width:100px;height: 100px;background: #666;}
+    </style>     
+</head>      
+<body>
+
+<div class="test">
+  <div class="one">1</div>
+  <div class="two">2</div>
+  <button id="btn">按钮</button>
+</div>  
+
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+<script type="text/javascript">
+  console.log('这个输出在eruda之前，所以无法捕获到~');
+</script>
+<script type="text/javascript">
+(function () {
+    //var src = 'http://eruda.liriliri.io/eruda.min.js';
+    //var src = 'https://cdn.jsdelivr.net/npm/eruda';
+    var src = 'https://cdn.bootcss.com/eruda/1.3.2/eruda.min.js';
+
+    //添加下面的代码需要在url里填?eruda=true才能启动eruda
+    //if (!/eruda=true/.test(window.location)) return; 
+
+    document.write('<scr' + 'ipt src="' + src + '"></scr' + 'ipt>');
+    document.write('<scr' + 'ipt>eruda.init();</scr' + 'ipt>');
+})();
+</script>
+<script type="text/javascript">
+  console.log('这个输出在eruda之后，成功捕获！');
+  $('#btn').on('click', function() {
+    console.log('徐同保');
+  });
+</script>
+</body>      
+</html>
+```
+
+通过CDN引入
+
+```html
+<script src="//cdn.bootcss.com/eruda/1.3.0/eruda.min.js"></script> 
+<script>eruda.init();</script>
+```
+
+通过npm引入
+
+> npm install eruda --save
+
+在页面中加载脚本：
+
+```html
+<script src="node_modules/eruda/eruda.min.js"></script> 
+<script>eruda.init();</script>
+```
+
+配置面板的代码如下：
+
+```html
+<script>eruda.init({tool: ['console', 'elements']});</script>
+```
+
+## 使用middir生成项目目录
+
+安装:
+
+> npm i mddir -g
+
+在需要得到目录结构树的目录下打开终端,输入mddir,在根目录得到一个`directoryList.md`
+
+# vue3+ts+vite 搭建uniapp项目
+
+> npx @dcloudio/uvm // 控制包版本切换,更新包防止创建项目失败
+> npx degit dcloudio/uni-preset-vue#vite uni-shop //创建vue3的uni-app项目
+> 就是Vue3创建的项目默认不安装API语法提示依赖，所以要我们手动去安装一下，然后去tsconfig.json配置一下
+> npm i @dcloudio/types miniprogram-api-typings mini-types -D
+> npm i
+> npm run dev:mp-weixin
+> npm run build:
+
+## **模板下载：**
+
+uniapp 官网通过vue-cli 命令行创建uniapp，参考uni-app官网，使用  `npx degit dcloudio/uni-preset-vue#vite-ts my-vue3-project`下载模板；
+
+## **安装css预处理 sass:**
+
+项目终端输入：`yarn add node-sass@^4.0.0 sass-loader@^10.0.1 sass`（模板没有默认安装sass, 如果不安装直接使用会报错）
+
+## **安装uni-ui组件库，配置easycom模式无引入使用:**
+
+项目终端输入：`yarn add @dcloudio/uni-ui`
+`src/package.json` 文件配置easycom模式(组件无需import | require直接使用)
+
+```json
+"easycom": {
+    "autoscan": true,
+    "custom": {
+      "^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue"
+    }
+  }
+```
+
+## **配置使用微信小程序API**
+
+由于安装的`uniapp-ts`项目只会包含uni-app本身的@types声明，如果想直接使用wx或小程序的api的话就需要自行添加，以微信小程序为例：项目终端输入：`yarn add @types/weixin-app`
+
+打开`tsconfig.json`文件，在types选项中添加`weixin`使用的声明
+
+```json
+ "types": [
+        "@dcloudio/types",      //这一项是原本包含的  
+        "weixin-app",           //wx-app的TypeScript定义  新添加 
+ 
+/******************以下包需要先安装***************************/
+        
+        "miniprogram-api-typings",//微信小程序api的typescript类型定义文件，和weixin-app同；可选
+        "mini-types",             //支付宝小程序的typescript类型定义文件
+    ],
+```
+
+## **配置文件路径别名 | 可选**
+
+打开`vite.config.ts`文件，使用resolve选项配置：
+
+```typescript
+import { defineConfig } from 'vite'
+import uni from '@dcloudio/vite-plugin-uni'
+ 
+const path = require('path')
+ 
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [uni()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    },
+  },
+})
+```
+
+## **tsconfig.json中配置**
+
+```json
+//compilerOptions中配置
+ 
+"baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    },
+```
+
+## **发现在vite.config.ts中无法使用关键字 require；要重启编辑器）**
+
+安装依赖包：`pnpm add @types/node -D`
+
+`tsconfig.json`中配置 | 可选：
+
+```json
+//compilerOptions中配置
+ 
+"types": [
+        "@dcloudio/types",
+        "weixin-app", 
+        "miniprogram-api-typings",
+        "mini-types",
+        "node"          //可选
+    ],
+```
+
+**重启编辑器**
+
+**运行项目：** 
+
+使用`pnpm run dev:mp-weixin`运行**；微信开发者工具打开**`dist/mp-weixin`文件夹
+
+**卸载不需要的包**
+因为默认的项目中带了`vue-i18n`的包，而我们小程序和微信H5项目一般都不需要多语言所以把`vue-i18n`删除了
+
+> pnpm uninstall vue-i18n
+
+## **配置 eslint + prettier 自动格式化代码**
+
+安装相关依赖包
+
+> pnpm add @typescript-eslint/eslint-plugin --dev
+> pnpm add @typescript-eslint/parser --dev
+> pnpm add @vue/eslint-config-prettier --dev
+> pnpm add @vue/eslint-config-typescript --dev
+> pnpm add @vuedx/typescript-plugin-vue --dev
+> pnpm add eslint --dev
+> pnpm add eslint-plugin-prettier --dev
+> pnpm add eslint-plugin-vue --dev
+> pnpm add prettier --dev
+
+**ESLint配置.eslintrc.js文件**
+
+```js
+module.exports = {
+  root: true,
+  env: {
+    browser: true,
+    es2021: true,
+    node: true
+  },
+  extends: [
+    'plugin:vue/vue3-recommended',
+    'eslint:recommended',
+    '@vue/typescript/recommended',
+    '@vue/prettier',
+    '@vue/prettier/@typescript-eslint',
+     // eslint-config-prettier 的缩写
+    'prettier',
+  ],
+  parserOptions: {
+    ecmaVersion: 2021
+  },
+  plugins: [],
+  rules: {
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': 'off',
+    semi: 0,
+  }
+}
+```
+
+**prettier配置 .prettierrc.js**
+
+```js
+module.exports = {
+  printWidth: 120,
+  tabWidth: 2,
+  tabs: false,
+  semi: false,
+  singleQuote: true,
+  quoteProps: 'as-needed',
+  bracketSpacing: true,
+  jsxBracketSameLine: false,
+  arrowParens: 'always',
+  endOfLine: 'auto',
+}
+```
+
+**vscode 配置 .vscode/settings.json**
+
+```json
+{
+    "editor.formatOnSave": false,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    },
+    "eslint.validate": ["typescript", "vue", "html", "json"],
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "[javascript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[vue]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[html]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[json]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "json.format.enable": false
+  }
+```
+
+**配置package包检测命令**
+
+```json
+"lint": "eslint --ext .ts,tsx,vue src/** --no-error-on-unmatched-pattern --quiet",
+"lint:fix": "eslint --ext .ts,tsx,vue src/** --no-error-on-unmatched-pattern --fix"
+```
+
+**配置忽略检查的文件.eslintignore**
+
+```
+*.css
+*.less
+*.scss
+*.jpg
+*.png
+*.gif
+*.svg
+*vue.d.ts
+```
+
+## **设置别名**
+
+vite.config.ts
+
+```typescript
+resolve: {
+    alias: [
+        {
+            find: '@',
+            replacement: resolve(__dirname, 'src'),
+        },
+    ],
+},
+```
+
+tsconfig.json
+
+```json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [ "src/*" ],
+    },
+  }
+}
+```
+
+## **配置vuex**
+
+> pnpm add vuex@next
+
+![05.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3d1541c6d0d444a4a3e261126e2c0c43~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp?)
+
+src\store\modules\app\action-types.ts
+
+```typescript
+export enum AppActionTypes {
+  ACTION_LOGIN = 'ACTION_LOGIN',
+  ACTION_RESET_TOKEN = 'ACTION_RESET_TOKEN',
+}
+```
+
+src\store\modules\app\ations.ts
+
+```typescript
+import { ActionTree, ActionContext } from 'vuex'
+import { RootState } from '@/store'
+import { AppState } from './state'
+import { Mutations } from './mutations'
+import { AppActionTypes } from './action-types'
+import { AppMutationTypes } from './mutation-types'
+
+type AugmentedActionContext = {
+  commit<K extends keyof Mutations>(key: K, payload: Parameters<Mutations[K]>[1]): ReturnType<Mutations[K]>
+} & Omit<ActionContext<AppState, RootState>, 'commit'>
+
+export interface Actions {
+  [AppActionTypes.ACTION_RESET_TOKEN]({ commit }: AugmentedActionContext): void
+}
+
+export const actions: ActionTree<AppState, RootState> & Actions = {
+  [AppActionTypes.ACTION_LOGIN]({ commit }: AugmentedActionContext, token: string) {
+    commit(AppMutationTypes.SET_TOKEN, token)
+  },
+  [AppActionTypes.ACTION_RESET_TOKEN]({ commit }: AugmentedActionContext) {
+    commit(AppMutationTypes.SET_TOKEN, '')
+  },
+}
+```
+
+src\store\modules\app\index.ts
+
+```typescript
+import { Store as VuexStore, CommitOptions, DispatchOptions, Module } from 'vuex'
+import { RootState } from '@/store'
+import { state } from './state'
+import { actions, Actions } from './ations'
+import { mutations, Mutations } from './mutations'
+import type { AppState } from './state'
+
+export { AppState }
+
+export type AppStore<S = AppState> = Omit<VuexStore<S>, 'getters' | 'commit' | 'dispatch'> & {
+  commit<K extends keyof Mutations, P extends Parameters<Mutations[K]>[1]>(
+    key: K,
+    payload: P,
+    options?: CommitOptions
+  ): ReturnType<Mutations[K]>
+} & {
+  dispatch<K extends keyof Actions>(
+    key: K,
+    payload: Parameters<Actions[K]>[1],
+    options?: DispatchOptions
+  ): ReturnType<Actions[K]>
+}
+
+export const store: Module<AppState, RootState> = {
+  state,
+  actions,
+  mutations,
+}
+```
+
+src\store\modules\app\mutation-types.ts
+
+```typescript
+export enum AppMutationTypes {
+  SET_TOKEN = 'SET_TOKEN',
+}
+```
+
+src\store\modules\app\mutations.ts
+
+```typescript
+import { MutationTree } from 'vuex'
+import { AppState } from './state'
+import { AppMutationTypes } from './mutation-types'
+
+export type Mutations<S = AppState> = {
+  [AppMutationTypes.SET_TOKEN](state: S, token: string): void
+}
+export const mutations: MutationTree<AppState> & Mutations = {
+  [AppMutationTypes.SET_TOKEN](state: AppState, token: string) {
+    state.token = token
+  },
+}
+```
+
+src\store\modules\app\state.ts
+
+```typescript
+export interface AppState {
+  token: string
+}
+
+export const state: AppState = {
+  token: '',
+}
+```
+
+src\store\getters.ts
+
+```typescript
+import { RootState } from '@/store'
+export default {
+  token: (state: RootState) => state.app.token,
+}
+```
+
+src\store\index.ts
+
+```typescript
+import { createStore } from 'vuex'
+import { store as app, AppState, AppStore } from '@/store/modules/app'
+import getters from './getters'
+export interface RootState {
+  app: AppState
+}
+export type Store = AppStore<Pick<RootState, 'app'>>
+
+export const store = createStore<RootState>({
+  modules: {
+    app,
+  },
+  getters,
+})
+
+export function useStore(): Store {
+  return store as Store
+}
+```
+
+vuex使用示例
+
+```vue
+<template>
+  <view class="content">
+    <image class="logo" src="/static/logo.png" />
+    <view class="text-area">
+      <text class="title">{{ title }}</text>
+      <view @click="setToken">login</view>
+    </view>
+  </view>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { AppActionTypes } from '@/store/modules/app/action-types'
+import { useStore } from 'vuex'
+const title = ref('Hello')
+const store = useStore()
+const setToken = () => {
+  store.dispatch(AppActionTypes.ACTION_LOGIN, 'token')
+  title.value = store.state.app.token
+}
+</script>
+```
+
+## **配置uni.request实现网络请求**
+
+```typescript
+/* eslint-disable @typescript-eslint/ban-types */
+import appConfig from '@/config/app'
+import { useStore } from 'vuex'
+const { HEADER, HEADERPARAMS, TOKENNAME, HTTP_REQUEST_URL } = appConfig
+type RequestOptionsMethod = 'OPTIONS' | 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'TRACE' | 'CONNECT'
+type RequestOptionsMethodAll = RequestOptionsMethod | Lowercase<RequestOptionsMethod>
+
+/**
+ * 发送请求
+ */
+function baseRequest(
+  url: string,
+  method: RequestOptionsMethod,
+  data: any,
+  { noAuth = false, noVerify = false }: any,
+  params: unknown
+) {
+  const store = useStore()
+  const token = store.state.app.token
+  const Url = HTTP_REQUEST_URL
+  let header = JSON.parse(JSON.stringify(HEADER))
+  if (params != undefined) {
+    header = HEADERPARAMS
+  }
+  if (!noAuth) {
+    if (!token) {
+      return Promise.reject({
+        msg: '未登录',
+      })
+    }
+    if (token && token !== 'null') header[TOKENNAME] = 'Bearer ' + token
+  }
+
+  return new Promise((reslove, reject) => {
+    uni.showLoading({
+      title: '加载中',
+      mask: true,
+    })
+    uni.request({
+      url: Url + url,
+      method: method || 'GET',
+      header: header,
+      data: data || {},
+      success: (res: any) => {
+        console.log('res', res)
+        uni.hideLoading()
+        res.data.token &&
+          res.data.token !== 'null' &&
+          store.commit('LOGIN', {
+            token: res.data.token,
+          })
+        if (noVerify) {
+          reslove(res)
+        } else if (res.statusCode === 200) {
+          reslove(res)
+        } else {
+          reject(res.data.message || '系统错误')
+        }
+      },
+      fail: (msg) => {
+        uni.hideLoading()
+        reject('请求失败')
+      },
+    })
+  })
+}
+
+// const request: Request = {}
+const requestOptions: RequestOptionsMethodAll[] = [
+  'options',
+  'get',
+  'post',
+  'put',
+  'head',
+  'delete',
+  'trace',
+  'connect',
+]
+type Methods = typeof requestOptions[number]
+const request: { [key in Methods]?: Function } = {}
+
+requestOptions.forEach((method) => {
+  const m = method.toUpperCase as unknown as RequestOptionsMethod
+  request[method] = (api, data, opt, params) => baseRequest(api, m, data, opt || {}, params)
+})
+
+export default request
+```
+
+## **利用Koa配置Mock数据服务器**
+
+dependencies
+
+```javascript
+"dependencies": {
+    "koa": "^2.13.0",
+    "koa-body": "^4.2.0",
+    "koa-logger": "^3.2.1",
+    "koa-router": "^10.0.0",
+    "koa2-cors": "^2.0.6",
+    "lodash": "^4.17.20",
+    "log4js": "^6.3.0",
+    "faker": "^5.1.0",
+    "reflect-metadata": "^0.1.13"
+}
+```
+
+devDependencies
+
+```javascript
+"devDependencies": {
+    "@types/koa": "^2.11.6",
+    "@types/koa-logger": "^3.1.1",
+    "@types/koa-router": "^7.4.1",
+    "@types/koa2-cors": "^2.0.1",
+    "@types/faker": "^5.1.5",
+}
+```
+
+在根目录下建一个mock目录
+
+具体目录结构如下
+
+![06.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/71e40462fd154acb90f258b357a2bc30~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp?)
+
+package.json里配置mock服务器启动命令
+
+```javascript
+"scripts": {
+	"mock": "cd mock && ts-node-dev mock.ts"
+}
+```
+
+api/user.ts
+
+```javascript
+import request from '@/utils/request.js'
+
+/**
+ * 获取用户信息
+ *
+ */
+export function fetchUserInfo() {
+  return request?.get?.('/user/userInfo', {}, { noAuth: true })
+}
+```
+
+测试访问使用
+
+```javascript
+fetchUserInfo()
+  .then((r) => {
+    console.log('r', r)
+  })
+  .catch((err) => console.log(err))
+```
+
+## 测试运行
+
+运行小程序测试环境
+
+> npm run dev:mp-weixin
+
+启动正常并打印出了mock的数据
+
+![07.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3d32f8259d8d42c6b3a81f9789216b01~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp?)
+
+打印出mock数据
+
+![08.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a6e01c86ae0f405da3cfeeb3356a0495~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp?)
+
+同理测试H5端运行情况
+
+> npm run dev:h5
+
+运行正常并打印出了mock数据
+
+![09.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2cf29c9b85054bf6aa3f7db4eadb66bd~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp?)
+
+## ---------------
+
+## 配置云函数目录
+
+首先我们在 src 目录下创建一个新的目录 `src/cloudfuntioncs` 用于存放我们的云函数，当你创建后我们会发现，这个目录在编译后并没有在微信开发工具中出现，也就意味着并没有被编译到最终产物中。
+
+这个原因是由于云函数文件夹并没有被其他的文件所引用，因此 vite 进行编译时会并不会将这个 `cloudfuntioncs` 这个目录打包到产物中，因此我们需要自己将这个文件给复制出来。这一步我使用的是 `rollup-plugin-copy` 这个 rollup 插件。
+
+1. 首先安装 `rollup-plugin-copy`
+
+> yarn add -D rollup-plugin-copy
+
+1. 接着在 `vite.config.ts` 中配置一下需要复制的目录:
+
+```ts
+import { defineConfig } from 'vite'
+import uni from '@dcloudio/vite-plugin-uni'
+import copy from 'rollup-plugin-copy'
+import path from 'path'
+
+export default defineConfig({
+  plugins: [copy({
+    targets: [
+      {
+        src: 'src/cloudfunctions/**/*',
+        dest: `dist/${process.env.NODE_ENV === 'production' ? 'build' : 'dev'}/${process.env.UNI_PLATFORM}/cloudfunctions`
+      }
+    ]
+  }), uni()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src')
+    }
+  }
+})
+```
+
+这一步我使用了环境变量去动态复制 `cloudfunctions` 目录到开发或者生产的目录位置。配置完成后我们就可以看到 `cloudfuntioncs` 目录在微信开发工具也能看到了。
+
+![image.png](https://img-blog.csdnimg.cn/img_convert/0b7f7539fad1d248e3d0a60c6a3a8618.png)
+
+## 配置项目 eslint
+
+既然配置了 ts ，为了开发更加规范，我们就将 eslint 也一并配置了，操作步骤如下：
+
+1. 安装 eslint
+
+> yarn add -D eslint
+
+1. 初始化 eslint
+
+> npx eslint --init
+
+执行命令后根据提示进行操作选择自己的风格，我选择的风格如下：
+
+![image.png](https://img-blog.csdnimg.cn/img_convert/fc63e2420bbdf51029625c51c26e75e0.png)
+
+1. 配置全局变量
+   由于 `uni` 或者 `wx` 这种全局变量是不需要引入就可以使用的，eslint 会提示变量未定义，因此我们需要在 `eslintrc.js` 中配置一下 globals 变量：
+
+```js
+modele.export = 
+{
+//...
+globals: {
+    uni: true,
+    UniApp: true,
+    wx: true,
+    ICloud: true
+  },
+}
+12345678910
+```
+
+## 配置 pinia 全局数据及数据持久化
+
+因为使用了 `vue3 + ts` 的技术栈，继续使用 vuex 的话配置起来很麻烦，而且 ts 支持并不算好，因此我们使用 pinia 来替代 vuex，首先安装 [pinia](https://pinia.vuejs.org/)
+
+> yarn add pinia
+
+pinia 和 vuex 一样都可以以模块的方式去区分不同的全局数据类型，但是我这里全局数据并不多，因此我将所有的全局数据放在一个文件中：
+
+```ts
+// useStore.ts
+import { defineStore, createPinia } from 'pinia'
+import { createPersistedState } from 'pinia-plugin-persistedstate'
+import { User } from '../types/user'
+
+type StateType = {
+	user?: User
+}
+export default defineStore('global', {
+  persist: {
+    key: 'pinia',
+    paths: ['user']
+  },
+  state: (): StateType => ({
+    user: undefined
+  }),
+  actions: {
+    setData<T extends keyof StateType> ({ key, value }: { key: T, value: any }) {
+      this[key] = value
+    }
+  }
+})
+
+export const pinia = createPinia().use(
+  createPersistedState({
+    storage: {
+      getItem (key: string): string | null {
+        return uni.getStorageSync(key)
+      },
+      setItem (key: string, value: string) {
+        uni.setStorageSync(key, value)
+      }
+    }
+  })
+)
+```
+
+在上面的代码中，我通过 `pinia-plugin-persistedstate` 进行数据的持久化，由于默认的是使用 `localstorage` 进行数据存储，因此需要自己重新定义一下，使用 uniapp 的 api 进行数据存取。
+
+`persist` 字段中 `key` 是存储在本地的键名，`path` 则是选择某个数据需要进行持久化，我配置的持久化效果如下图：
+
+![image.png](https://img-blog.csdnimg.cn/img_convert/0cf7d0844b620173d98d67711bef8dd1.png)
+
+接下来在 `main.ts` 中引入一下：
+
+```ts
+// main.ts
+import { createSSRApp } from 'vue'
+import App from './App.vue'
+import { pinia } from './hooks/useStore'
+
+export function createApp () {
+  const app = createSSRApp(App)
+  app.use(pinia)
+  return {
+    app
+  }
+}
+```
+
+这样我们就可以通过 pinia 来进行全局数据的存取了,使用的方式如下：
+
+```ts
+import useStore from '@/hooks/useStore'
+const store = useStore()
+
+// 取值
+console.log(store.user)
+
+// 赋值
+store.setData({ key: 'user', value:{ id: 0, name: 'oil '} })
+```
+
+### 注意点
+
+在使用 pinia 中的变量时如果使用解构赋值，需要使用 `storeToRefs` 这个方法包裹一下，否则全局变量会失去响应式，变量更新时并不会重新渲染组件。
+
+```ts
+import { storeToRefs } from 'pinia'
+
+// bad
+const {user} = useStore()
+
+// good
+const {user} = storeToRefs(useStore())
+```
