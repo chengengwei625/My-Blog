@@ -280,9 +280,9 @@ import{_ as s,c as n,o as a,a as l}from"./app.80bec842.js";const A=JSON.parse('{
 <span class="line"><span style="color:#A6ACCD;">-webkit-box-orient: vertical; </span><span style="color:#676E95;font-style:italic;">/* \u5782\u76F4\u6392\u5217 */</span></span>
 <span class="line"><span style="color:#FFCB6B;">word-break</span><span style="color:#A6ACCD;">: </span><span style="color:#FFCB6B;">break-all</span><span style="color:#A6ACCD;">;  </span><span style="color:#676E95;font-style:italic;">/* \u5185\u5BB9\u81EA\u52A8\u6362\u884C */</span></span>
 <span class="line"></span></code></pre><div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br></div></div><p>\u8BBE\u7F6E\u7B2C\u4E8C\u884C\u8D85\u51FA\u90E8\u5206\u663E\u793A\u7701\u7565\u53F7:</p><div class="language-css line-numbers-mode"><span class="copy"></span><pre><code><span class="line"><span style="color:#FFCB6B;">text-overflow</span><span style="color:#A6ACCD;">: ellipsis;</span></span>
-<span class="line"><span style="color:#A6ACCD;">display: -webkit-box;</span></span>
-<span class="line"><span style="color:#A6ACCD;">-webkit-box-orient: vertical;</span></span>
-<span class="line"><span style="color:#A6ACCD;">-webkit-line-clamp: 2;</span></span>
 <span class="line"><span style="color:#A6ACCD;">overflow: hidden;</span></span>
+<span class="line"><span style="color:#A6ACCD;">display: -webkit-box;</span></span>
+<span class="line"><span style="color:#A6ACCD;">-webkit-line-clamp: 2;</span></span>
+<span class="line"><span style="color:#A6ACCD;">-webkit-box-orient: vertical;</span></span>
 <span class="line"><span style="color:#FFCB6B;">word-break</span><span style="color:#A6ACCD;">: </span><span style="color:#FFCB6B;">break-all</span><span style="color:#A6ACCD;">;</span></span>
 <span class="line"></span></code></pre><div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br></div></div>`,50),e=[o];function r(t,c,D,y,F,C){return a(),n("div",null,e)}var b=s(p,[["render",r]]);export{A as __pageData,b as default};
