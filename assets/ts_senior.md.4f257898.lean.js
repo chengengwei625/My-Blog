@@ -1,0 +1,1 @@
+import{_ as e,c as t,o as a}from"./app.28c90bba.js";const l=JSON.parse('{"title":"","description":"","frontmatter":{},"headers":[],"relativePath":"ts/senior.md","lastUpdated":null}'),r={name:"ts/senior.md"};function s(o,n,c,i,p,d){return a(),t("div")}var m=e(r,[["render",s]]);export{l as __pageData,m as default};
